@@ -13,11 +13,12 @@ class User(Base):
     name = Column(String, nullable=False)
     email = Column(String, nullable=False, unique=True)
     password = Column(String, nullable=False)
-    bitcoin_traders = relationship("BitcoinTrader", back_populates="user")
+    bitcoin_traders = relationship("Bitcoin", back_populates="owner")
 
 class Bitcoin(Base):
     __tablename__ = "bitcoins"
     id = Column(Integer, primary_key=True, nullable=False)
+    owner_id = Column(Integer, ForeignKey("users.id"))
     symbol_id = Column(String)
     time_exchange = Column(TIMESTAMP)
     time_coinapi = Column(TIMESTAMP)
@@ -26,6 +27,5 @@ class Bitcoin(Base):
     size = Column(Integer)
     taker_side = Column(String)
     post_text = Column(String, index=True)
-    date_created =  Column(DateTime, default= datetime.utcnow)
 
-    owner = relationship("User", back_populates="bitcoins")
+    owner = relationship("User", back_populates="bitcoin_traders")

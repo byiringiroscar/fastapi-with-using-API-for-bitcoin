@@ -10,3 +10,6 @@ class UserNew(User):
 
 class Userout(User):
     id: int
+
+class TokenData(BaseModel):
+    id: str|None = None
