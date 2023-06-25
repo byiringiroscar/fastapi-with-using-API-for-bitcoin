@@ -38,3 +38,4 @@ websockets==11.0.3
 python-jose
 psycopg2
 requests
+decouple
