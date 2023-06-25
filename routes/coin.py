@@ -13,6 +13,7 @@ from database.config import settings
 from utils.bitcoinapi import get_bitcoin_trader
 
 
+
 router = APIRouter(prefix="/bitcoin", tags=["Bitcoin traders"])
 
 @router.get("/")
@@ -38,3 +39,10 @@ async def create_bitcoin(db: Session = Depends(get_db), current_user: schema.Use
     db.commit()
     db.refresh(current_user)
     return {"detail": "Bitcoin trader created successfully"}
+
+@router.get("/{id}", status_code=status.HTTP_200_OK)
+async def get_bitcoin_by_id(id: int, db: Session = Depends(get_db), current_user: schema.User = Depends(oauth2.get_current_user)):
+    bitcoin = db.query(Bitcoin).filter_by(id=id, owner_id=current_user.id).first()
+    if not bitcoin:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Bitcoin trader with id {id} not found")
+    return bitcoin
